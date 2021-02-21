@@ -1,6 +1,6 @@
 let socket;
 
-let messageToSend = '';
+let messageToSend = "";
 
 // p5.SpeechRec - Basic
 var robot = new p5.SpeechRec(); // speech recognition object
@@ -13,11 +13,11 @@ robot.onEnd = onVoiceRecognitionEnd; // callback function that triggers voice re
 function setup() {
   listen();
   socket = io.connect();
-  socket.on('messageFromServer', onReceiveMessageFromServer);
+  socket.on("messageFromServer", onReceiveMessageFromServer);
 }
 
 function draw() {
-  let textBox = document.getElementById('speech-text');
+  let textBox = document.getElementById("speech-text");
   if (robot.resultString != undefined) {
     textBox.innerText = robot.resultString;
   }
@@ -29,32 +29,33 @@ function listen() {
 }
 
 function showResult() {
-  console.log('Transcript: ' + robot.resultString); // log the transcript
-  console.log('Confidence: ' + robot.resultConfidence); // log the confidence
+  console.log("Transcript: " + robot.resultString); // log the transcript
+  console.log("Confidence: " + robot.resultConfidence); // log the confidence
 }
 
 function showError() {
-  console.log('An error occurred!');
+  console.log("An error occurred!");
 }
 
 function restartListening() {
-  console.log('restart listening...');
+  console.log("restart listening...");
   robot.start(); // start listening
 }
 
 function onVoiceRecognitionEnd() {
   console.log(
-    'Voice recognition ended!!!, The message is ' + robot.resultString
+    "Voice recognition ended!!!, The message is " + robot.resultString
   );
 
   sendTheMessageToTheServer();
 }
 
 function sendTheMessageToTheServer() {
-  socket.emit('messageFromUser', robot.resultString);
+  socket.emit("messageFromUser", robot.resultString);
 }
 
 function onReceiveMessageFromServer(msg) {
-  console.log('Message from server is... ' + msg);
+  console.log("Message from server is... " + msg);
   // TODO get the computer to speak this message when it comes in
+  console.log("daniel was here 2021");
 }
