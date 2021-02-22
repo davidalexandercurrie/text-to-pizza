@@ -19,6 +19,8 @@
   "homepage": "https://github.com/davidalexandercurrie/web-socket-drums-aemon#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^3.0.4"
+    "natural": "^4.0.0",
+    "socket.io": "^3.0.4",
+    "wordpos": "^2.1.0"
   }
 }
