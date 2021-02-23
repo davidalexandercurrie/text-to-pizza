@@ -10,6 +10,9 @@ robot.onResult = showResult; // callback function that triggers when speech is r
 robot.onError = showError; // callback function that triggers when an error occurs
 robot.onEnd = onVoiceRecognitionEnd; // callback function that triggers voice recognition ends
 
+//p5.Speech
+var robotVoice = new p5.Speech(); // speech synthesis object
+
 function setup() {
   listen();
   socket = io.connect();
@@ -58,4 +61,5 @@ function onReceiveMessageFromServer(msg) {
   console.log("Message from server is... " + msg);
   // TODO get the computer to speak this message when it comes in
   console.log("daniel was here 2021");
+  robotVoice.speak(msg);
 }
