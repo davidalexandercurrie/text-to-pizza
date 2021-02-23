@@ -6,6 +6,9 @@ const options = {
   /* ... */
 };
 const io = require('socket.io')(http, options);
+const emojiFromWord = require('emoji-from-word');
+
+const { emojify } = require('@twuni/emojify');
 
 const WordPOS = require('wordpos'),
   wordpos = new WordPOS();
@@ -24,7 +27,7 @@ io.on('connection', socket => {
 
   socket.on('messageFromUser', msg => {
     // console.log('The message from User is ' + msg);
-    let arr = tokenizer.tokenize(msg);
+    let arr = tokenizer.tokenize(msg != undefined ? msg : '');
     let counter = 0;
     for (let i = 0; i < arr.length; i++) {
       wordpos.isNoun(arr[i], function (result) {
@@ -34,8 +37,10 @@ io.on('connection', socket => {
         counter++;
         if (counter === arr.length) {
           let words = arr.join(' ');
-          console.log(words);
-          socket.broadcast.emit('messageFromServer', words);
+          let emojis = emojify(
+            arr.map(word => emojiFromWord(word).toString()).join(' ')
+          );
+          socket.broadcast.emit('messageFromServer', words, emojis);
         }
       });
     }

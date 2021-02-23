@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/davidalexandercurrie/web-socket-drums-aemon#readme",
   "dependencies": {
+    "@twuni/emojify": "^1.0.2",
+    "emoji-from-word": "^1.2.12",
     "express": "^4.17.1",
     "natural": "^4.0.0",
     "socket.io": "^3.0.4",

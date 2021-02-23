@@ -1,6 +1,8 @@
 let socket;
 
 let messageToSend = '';
+let displayText = '';
+let length = 0;
 
 // p5.SpeechRec - Basic
 var robot = new p5.SpeechRec(); // speech recognition object
@@ -18,8 +20,9 @@ function setup() {
 
 function draw() {
   let textBox = document.getElementById('speech-text');
-  if (robot.resultString != undefined) {
-    textBox.innerText = robot.resultString;
+  if (frameCount % 10 === 0 && length < displayText.length) {
+    textBox.innerText = displayText.substring(0, length + 1);
+    length++;
   }
 }
 
@@ -46,15 +49,21 @@ function onVoiceRecognitionEnd() {
   console.log(
     'Voice recognition ended!!!, The message is ' + robot.resultString
   );
-
+  if (robot.resultString != undefined) {
+    displayText = robot.resultString;
+    length = 0;
+  }
   sendTheMessageToTheServer();
 }
 
 function sendTheMessageToTheServer() {
+  console.log('sending message to server');
   socket.emit('messageFromUser', robot.resultString);
 }
 
-function onReceiveMessageFromServer(msg) {
-  console.log('Message from server is... ' + msg);
+function onReceiveMessageFromServer(words, emojis) {
+  console.log('Message from server is... ' + words);
+  console.log(emojis);
+  document.getElementById('received-text').innerHTML = emojis;
   // TODO get the computer to speak this message when it comes in
 }
