@@ -16,6 +16,7 @@ robot.onEnd = onVoiceRecognitionEnd; // callback function that triggers voice re
 var robotVoice = new p5.Speech(); // speech synthesis object
 
 function setup() {
+  noCanvas();
   listen();
   socket = io.connect();
   socket.on('messageFromServer', onReceiveMessageFromServer);
@@ -23,10 +24,21 @@ function setup() {
 
 function draw() {
   let textBox = document.getElementById('speech-text');
-  if (frameCount % 10 === 0 && length < displayText.length) {
+  if (frameCount % 5 === 0 && length < displayText.length) {
     textBox.innerText = displayText.substring(0, length + 1);
     length++;
   }
+  // if (frameCount % 20 === 0) {
+  //   let advert = createDiv('🍕'.repeat(random(12)));
+  //   advert.style(
+  //     `border: solid 2px lightblue; position: fixed; height: 200px; width: 300px; background: white; top: ${random(
+  //       100
+  //     )}%; left: ${random(100)}%; font-size: ${random(
+  //       36,
+  //       70
+  //     )}px; text-align: center;`
+  //   );
+  // }
 }
 
 function listen() {
@@ -67,7 +79,7 @@ function sendTheMessageToTheServer() {
 function onReceiveMessageFromServer(words, emojis) {
   console.log('Message from server is... ' + words);
   console.log(emojis);
-  document.getElementById('received-text').innerHTML = emojis;
+  document.getElementById('received-text').innerText = emojis;
   // TODO get the computer to speak this message when it comes in
   console.log('daniel was here 2021');
   robotVoice.setVoice(Math.floor(random(robotVoice.voices.length)));
