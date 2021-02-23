@@ -61,5 +61,6 @@ function onReceiveMessageFromServer(msg) {
   console.log("Message from server is... " + msg);
   // TODO get the computer to speak this message when it comes in
   console.log("daniel was here 2021");
+  robotVoice.setVoice(Math.floor(random(myVoice.voices.length)));
   robotVoice.speak(msg);
 }
