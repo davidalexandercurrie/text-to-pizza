@@ -1,8 +1,19 @@
 let socket;
 
-let messageToSend = "";
-let displayText = "";
+let messageToSend = '';
+let displayText = '';
 let length = 0;
+
+let sounds = [];
+let dialupSound;
+function preload() {
+  for (let i = 0; i < 4; i++) {
+    sounds[i] = loadSound(`audio/key${i + 1}.mp3`);
+    console.log(`audio/key${i + 1}.mp3`);
+  }
+  dialupSound = loadSound('audio/internet.mp3');
+  console.log('audio/internet.mp3');
+}
 
 // p5.SpeechRec - Basic
 var robot = new p5.SpeechRec(); // speech recognition object
@@ -19,16 +30,20 @@ function setup() {
   noCanvas();
   // listen();
   socket = io.connect();
-  socket.on("messageFromServer", onReceiveMessageFromServer);
+  socket.on('messageFromServer', onReceiveMessageFromServer);
 
   getAudioContext().suspend(); //make sure audio is paused
 }
 
 function draw() {
-  let textBox = document.getElementById("speech-text");
+  let textBox = document.getElementById('speech-text');
   if (frameCount % 5 === 0 && length < displayText.length) {
     textBox.innerText = displayText.substring(0, length + 1);
     length++;
+    random(sounds).play();
+  }
+  if (length == displayText.length) {
+    dialupSound.stop();
   }
   // if (frameCount % 20 === 0) {
   //   let advert = createDiv('🍕'.repeat(random(12)));
@@ -46,25 +61,26 @@ function draw() {
 function listen() {
   robot.start(); // start listening
   console.log("I'm listening...");
+  document.getElementById('listen-button').innerText = '🔴';
 }
 
 function showResult() {
-  console.log("Transcript: " + robot.resultString); // log the transcript
-  console.log("Confidence: " + robot.resultConfidence); // log the confidence
+  console.log('Transcript: ' + robot.resultString); // log the transcript
+  console.log('Confidence: ' + robot.resultConfidence); // log the confidence
 }
 
 function showError() {
-  console.log("An error occurred!");
+  console.log('An error occurred!');
 }
 
 function restartListening() {
-  console.log("restart listening...");
+  console.log('restart listening...');
   robot.start(); // start listening
 }
 
 function onVoiceRecognitionEnd() {
   console.log(
-    "Voice recognition ended!!!, The message is " + robot.resultString
+    'Voice recognition ended!!!, The message is ' + robot.resultString
   );
   if (robot.resultString != undefined) {
     displayText = robot.resultString;
@@ -74,16 +90,19 @@ function onVoiceRecognitionEnd() {
 }
 
 function sendTheMessageToTheServer() {
-  console.log("sending message to server");
-  socket.emit("messageFromUser", robot.resultString);
+  console.log('sending message to server');
+  socket.emit('messageFromUser', robot.resultString);
+  document.getElementById('listen-button').innerText = 'Listen';
+  dialupSound.currentTime(random(dialupSound.duration()));
+  dialupSound.loop();
 }
 
 function onReceiveMessageFromServer(words, emojis) {
-  console.log("Message from server is... " + words);
+  console.log('Message from server is... ' + words);
   console.log(emojis);
-  document.getElementById("received-text").innerText = emojis;
+  document.getElementById('received-text').innerText = emojis;
   // TODO get the computer to speak this message when it comes in
-  console.log("daniel was here 2021");
+  console.log('daniel was here 2021');
 
   //speak message from server
   robotVoice.setVoice(Math.floor(random(robotVoice.voices.length)));
