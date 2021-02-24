@@ -50,3 +50,9 @@ button:focus {
 button:hover {
   background-color: pink;
 }
+
+.pop-ups {
+}
+.pop-ups:hover {
+  cursor: pointer;
+}

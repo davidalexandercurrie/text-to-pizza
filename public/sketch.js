@@ -49,14 +49,22 @@ function draw() {
   if (frameCount % 40 === 0 && advertisementEmojis.length > 0) {
     console.log(advertisementEmojis);
     let advertEmoji = random(advertisementEmojis);
-    let advert = createDiv(advertEmoji.repeat(random(12)));
+    let advert = createDiv(advertEmoji.repeat(random(6)));
+    let xButton = createDiv('🆇');
+    xButton.mousePressed(() => {
+      advert.remove();
+    });
+    xButton.addClass('pop-ups');
+    advert.child(xButton);
+    xButton.style(
+      'position: absolute; top: 0; right: 0; padding: 0; margin: 0; border: 2px solid black'
+    );
     advert.style(
-      `border: solid 2px lightblue; position: fixed; height: 200px; width: 300px; background: white; top: ${random(
-        100
-      )}%; left: ${random(100)}%; font-size: ${random(
-        36,
-        70
-      )}px; text-align: center;`
+      `border: solid 2px darkgrey; position: fixed; height: 200px; width: 300px; background: rgb(${random(
+        255
+      )}, ${random(255)}, ${random(255)}); top: ${random(90)}%; left: ${random(
+        90
+      )}%; font-size: ${random(36, 70)}px; text-align: center;`
     );
   }
 }
