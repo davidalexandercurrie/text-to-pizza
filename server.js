@@ -1,69 +1,69 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const http = require("http").createServer(app);
+const http = require('http').createServer(app);
 
 const options = {
   /* ... */
 };
-const io = require("socket.io")(http, options);
-const emojiFromWord = require("emoji-from-word");
+const io = require('socket.io')(http, options);
+const emojiFromWord = require('emoji-from-word');
 
-const { emojify } = require("@twuni/emojify");
+const { emojify } = require('@twuni/emojify');
 
-const WordPOS = require("wordpos"),
+const WordPOS = require('wordpos'),
   wordpos = new WordPOS();
 
-const natural = require("natural");
+const natural = require('natural');
 const tokenizer = new natural.WordTokenizer();
 
-app.use("/", express.static("public"));
+app.use('/', express.static('public'));
 
 const listener = http.listen(process.env.PORT || 3000, process.env.IP, () => {
-  console.log("listening on *:3000");
+  console.log('listening on *:3000');
 });
 
 let arrayX = [
   {
-    word: "",
+    word: '',
     users: {
-      name: "",
+      name: '',
       count: 0,
     },
   },
 ];
 let nounBank = [];
 
-io.on("connection", (socket) => {
-  console.log("User connected! Their ID is " + socket.id);
+io.on('connection', socket => {
+  console.log('User connected! Their ID is ' + socket.id);
 
-  socket.on("messageFromUser", (msg) => {
+  socket.on('messageFromUser', msg => {
     // console.log('The message from User is ' + msg);
-    let arr = tokenizer.tokenize(msg != undefined ? msg : "");
+    let arr = tokenizer.tokenize(msg != undefined ? msg : '');
     let counter = 0;
     for (let i = 0; i < arr.length; i++) {
-      let isAverbs;
-      wordpos.isAdverb(arr[i],function(result){
-      isAverb = result;
-      };
+      let isAdverbs = false;
+      wordpos.isAdverb(arr[i], function (result) {
+        isAdverbs = result;
+      });
       if (!isAdverbs) {
         wordpos.isNoun(arr[i], function (result) {
           if (result && !nounBank.includes(arr[i])) {
-           nounBank.push(arr[i]);
-           arr[i] = "pizza";
+            nounBank.push(arr[i]);
+            arr[i] = 'pizza';
           }
           console.log(nounBank);
-      
+
           counter++;
-          
+
           if (counter === arr.length) {
-            let words = arr.join(" ");
+            let words = arr.join(' ');
             let emojis = emojify(
-            arr.map((word) => emojiFromWord(word).toString()).join(" ")
-          );
-          socket.broadcast.emit("messageFromServer", words, emojis);
-        }
-      
-      });
+              arr.map(word => emojiFromWord(word).toString()).join(' ')
+            );
+            socket.broadcast.emit('messageFromServer', words, emojis);
+          }
+        });
+      }
     }
   });
 });
