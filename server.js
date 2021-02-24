@@ -41,6 +41,7 @@ io.on('connection', socket => {
           if (result && !nounBank.includes(arr[i])) {
             nounBank.push(arr[i]);
             if (nounBank.length > 40) {
+              console.log('removing: ' + nounBank[0]);
               nounBank.splice(0, 1);
             }
             arr[i] = 'pizza';
