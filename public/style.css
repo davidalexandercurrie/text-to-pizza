@@ -36,10 +36,12 @@ body {
   background-size: 100% 100%;
 }
 #speech-text {
-  height: 40%;
+  margin-top: 4em;
+  height: 30%;
 }
 #received-text {
   height: 20%;
+  color: darkred;
 }
 button {
   font-family: MyWebFont;
@@ -79,4 +81,25 @@ button:hover {
 .btn-disabled {
   background: red;
   pointer-events: none;
+}
+
+#window-bar {
+  background: white;
+  border: 2px solid darkblue;
+  height: 1em;
+  margin: -2em;
+  position: relative;
+}
+#x-window {
+  position: relative;
+  float: right;
+  margin-top: 0;
+  font-size: 0.5em;
+  padding: 1px 1em;
+  border: 2px solid darkblue;
+  border-top: 0;
+  border-bottom: 0;
+}
+#x-window:hover {
+  background: red;
 }

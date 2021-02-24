@@ -136,3 +136,7 @@ function onReceiveMessageFromServer(words, emojis, nounlist) {
 function mousePressed() {
   userStartAudio();
 }
+
+function closeWindow() {
+  document.getElementById('received-text').innerText = 'FATAL ERROR';
+}
