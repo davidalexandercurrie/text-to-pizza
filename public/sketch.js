@@ -46,7 +46,8 @@ function draw() {
   if (length == displayText.length) {
     dialupSound.stop();
   }
-  if (frameCount % 40 === 0 && advertisementEmojis > 0) {
+  if (frameCount % 40 === 0 && advertisementEmojis.length > 0) {
+    console.log(advertisementEmojis);
     let advertEmoji = random(advertisementEmojis);
     let advert = createDiv(advertEmoji.repeat(random(12)));
     advert.style(
@@ -99,9 +100,8 @@ function sendTheMessageToTheServer() {
   dialupSound.loop();
 }
 
-function onReceiveMessageFromServer(words, emojis) {
+function onReceiveMessageFromServer(words, emojis, nounlist) {
   console.log('Message from server is... ' + words);
-  console.log(emojis);
   document.getElementById('received-text').innerText = emojis;
   // TODO get the computer to speak this message when it comes in
   console.log('daniel was here 2021');
@@ -110,7 +110,6 @@ function onReceiveMessageFromServer(words, emojis) {
   robotVoice.setVoice(Math.floor(random(robotVoice.voices.length)));
   robotVoice.speak(words);
   advertisementEmojis = nounlist;
-  console.log(advertisementEmojis);
 }
 
 function mousePressed() {

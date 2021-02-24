@@ -51,9 +51,14 @@ io.on('connection', socket => {
             let emojis = emojify(
               arr.map(word => emojiFromWord(word).toString()).join(' ')
             );
-            let nounEmojis = emojify(
-              nounBank.map(word => emojiFromWord(word).toString())
-            );
+            // let nounEmojis = emojify(
+            //   nounBank.map(word => emojiFromWord(word).toString())
+            // );
+            let nounEmojis = [];
+            for (word of nounBank) {
+              nounEmojis.push(emojify(emojiFromWord(word).toString()));
+            }
+            console.log(nounEmojis);
             socket.broadcast.emit(
               'messageFromServer',
               words,
