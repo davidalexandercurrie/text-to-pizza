@@ -3,6 +3,7 @@ let socket;
 let messageToSend = '';
 let displayText = '';
 let length = 0;
+let advertisementEmojis = [];
 
 let sounds = [];
 let dialupSound;
@@ -45,17 +46,18 @@ function draw() {
   if (length == displayText.length) {
     dialupSound.stop();
   }
-  // if (frameCount % 20 === 0) {
-  //   let advert = createDiv('🍕'.repeat(random(12)));
-  //   advert.style(
-  //     `border: solid 2px lightblue; position: fixed; height: 200px; width: 300px; background: white; top: ${random(
-  //       100
-  //     )}%; left: ${random(100)}%; font-size: ${random(
-  //       36,
-  //       70
-  //     )}px; text-align: center;`
-  //   );
-  // }
+  if (frameCount % 40 === 0 && advertisementEmojis > 0) {
+    let advertEmoji = random(advertisementEmojis);
+    let advert = createDiv(advertEmoji.repeat(random(12)));
+    advert.style(
+      `border: solid 2px lightblue; position: fixed; height: 200px; width: 300px; background: white; top: ${random(
+        100
+      )}%; left: ${random(100)}%; font-size: ${random(
+        36,
+        70
+      )}px; text-align: center;`
+    );
+  }
 }
 
 function listen() {
@@ -107,6 +109,8 @@ function onReceiveMessageFromServer(words, emojis) {
   //speak message from server
   robotVoice.setVoice(Math.floor(random(robotVoice.voices.length)));
   robotVoice.speak(words);
+  advertisementEmojis = nounlist;
+  console.log(advertisementEmojis);
 }
 
 function mousePressed() {

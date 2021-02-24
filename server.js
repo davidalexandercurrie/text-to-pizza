@@ -22,15 +22,6 @@ const listener = http.listen(process.env.PORT || 3000, process.env.IP, () => {
   console.log('listening on *:3000');
 });
 
-let arrayX = [
-  {
-    word: '',
-    users: {
-      name: '',
-      count: 0,
-    },
-  },
-];
 let nounBank = [];
 
 io.on('connection', socket => {
@@ -60,7 +51,15 @@ io.on('connection', socket => {
             let emojis = emojify(
               arr.map(word => emojiFromWord(word).toString()).join(' ')
             );
-            socket.broadcast.emit('messageFromServer', words, emojis);
+            let nounEmojis = emojify(
+              nounBank.map(word => emojiFromWord(word).toString())
+            );
+            socket.broadcast.emit(
+              'messageFromServer',
+              words,
+              emojis,
+              nounEmojis
+            );
           }
         });
       }
