@@ -39,14 +39,23 @@ function setup() {
 function draw() {
   let textBox = document.getElementById('speech-text');
   if (frameCount % 5 === 0 && length < displayText.length) {
+    console.log('typing');
     textBox.innerText = displayText.substring(0, length + 1);
     length++;
     random(sounds).play();
+    if (length == displayText.length) {
+      document.getElementById('listen-button').innerText = 'Record Message';
+      document.getElementById('listen-button').classList.remove('btn-disabled');
+    }
   }
   if (length == displayText.length) {
     dialupSound.stop();
   }
-  if (frameCount % 40 === 0 && advertisementEmojis.length > 0) {
+  console.log(advertisementEmojis.length);
+  if (
+    frameCount % (120 - advertisementEmojis.length) === 0 &&
+    advertisementEmojis.length > 0
+  ) {
     console.log(advertisementEmojis);
     let advertEmoji = random(advertisementEmojis);
     let advert = createDiv(advertEmoji.repeat(random(6)));
@@ -72,12 +81,13 @@ function draw() {
 function listen() {
   robot.start(); // start listening
   console.log("I'm listening...");
-  document.getElementById('listen-button').innerText = '🔴';
+  document.getElementById('listen-button').innerText = 'Listening';
+  document.getElementById('listen-button').classList.add('btn-disabled');
 }
 
 function showResult() {
-  console.log('Transcript: ' + robot.resultString); // log the transcript
-  console.log('Confidence: ' + robot.resultConfidence); // log the confidence
+  // console.log('Transcript: ' + robot.resultString); // log the transcript
+  // console.log('Confidence: ' + robot.resultConfidence); // log the confidence
 }
 
 function showError() {
@@ -96,14 +106,17 @@ function onVoiceRecognitionEnd() {
   if (robot.resultString != undefined) {
     displayText = robot.resultString;
     length = 0;
+    sendTheMessageToTheServer();
+  } else {
+    document.getElementById('listen-button').innerText = 'Record Message';
+    document.getElementById('listen-button').classList.remove('btn-disabled');
   }
-  sendTheMessageToTheServer();
 }
 
 function sendTheMessageToTheServer() {
   console.log('sending message to server');
   socket.emit('messageFromUser', robot.resultString);
-  document.getElementById('listen-button').innerText = 'Listen';
+  document.getElementById('listen-button').innerText = 'Sending';
   dialupSound.currentTime(random(dialupSound.duration()));
   dialupSound.loop();
 }
