@@ -31,6 +31,7 @@ let arrayX = [
     },
   },
 ];
+let nounBank = [];
 
 io.on("connection", (socket) => {
   console.log("User connected! Their ID is " + socket.id);
@@ -39,27 +40,29 @@ io.on("connection", (socket) => {
     // console.log('The message from User is ' + msg);
     let arr = tokenizer.tokenize(msg != undefined ? msg : "");
     let counter = 0;
-    let nounBank = [];
     for (let i = 0; i < arr.length; i++) {
-      // do adverb check
-      // let isAdverb
-      // wordpos.isAdverb(arr[i], function(result){
-      // isAdverb = result;
-      // })
-      wordpos.isNoun(arr[i], function (result) {
-        if (result) {
-          nounBank.push(arr[i]);
-          arr[i] = "pizza";
+      let isAverbs;
+      wordpos.isAdverb(arr[i],function(result){
+      isAverb = result;
+      };
+      if (!isAdverbs) {
+        wordpos.isNoun(arr[i], function (result) {
+          if (result && !nounBank.includes(arr[i])) {
+           nounBank.push(arr[i]);
+           arr[i] = "pizza";
+          }
           console.log(nounBank);
-        }
-        counter++;
-        if (counter === arr.length) {
-          let words = arr.join(" ");
-          let emojis = emojify(
+      
+          counter++;
+          
+          if (counter === arr.length) {
+            let words = arr.join(" ");
+            let emojis = emojify(
             arr.map((word) => emojiFromWord(word).toString()).join(" ")
           );
           socket.broadcast.emit("messageFromServer", words, emojis);
         }
+      
       });
     }
   });
