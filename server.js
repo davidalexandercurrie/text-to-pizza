@@ -40,6 +40,9 @@ io.on('connection', socket => {
         wordpos.isNoun(arr[i], function (result) {
           if (result && !nounBank.includes(arr[i])) {
             nounBank.push(arr[i]);
+            if (nounBank.length > 40) {
+              nounBank.splice(0, 1);
+            }
             arr[i] = 'pizza';
           }
           console.log(nounBank);
